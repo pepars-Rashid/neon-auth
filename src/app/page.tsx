@@ -4,10 +4,11 @@ import { getTodos } from '@/app/actions/todoActions';
 import StoreProvider from './StoreProvider';
 import TodoClient from './TodoClient';
 import { normalizeTodos } from '@/lib/utils/todoUtils';
+import type { Todo } from '@/lib/features/todos/todosSlice';
 import Loading from '@/components/Loading';
 
 export default function Home() {
-  const [initialTodos, setInitialTodos] = useState<any>([]);
+  const [initialTodos, setInitialTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

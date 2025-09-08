@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useUser, UserButton } from '@stackframe/stack';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { fetchTodos, addTodoAsync, toggleTodoAsync, deleteTodoAsync, clearError } from '@/lib/features/todos/todosSlice';
@@ -70,18 +71,18 @@ export default function TodoClient() {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Todo App</h2>
             <p className="text-gray-600 mb-6">Please sign in to manage your todos</p>
             <div className="flex gap-3 justify-center">
-              <a 
+              <Link 
                 href="/handler/sign-in" 
                 className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
               >
                 Sign In
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/handler/sign-up" 
                 className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors font-medium"
               >
                 Sign Up
-              </a>
+              </Link>
             </div>
           </div>
         </div>

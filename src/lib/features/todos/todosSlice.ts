@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getTodos, addTodo, toggleTodo, deleteTodo } from '@/app/actions/todoActions';
-import { normalizeTodo, normalizeTodos } from '../../utils/todoUtils';
+import { normalizeTodos } from '../../utils/todoUtils';
 
 export interface Todo {
   id: number;

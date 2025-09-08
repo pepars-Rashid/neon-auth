@@ -1,9 +1,16 @@
+interface DatabaseTodo {
+  id: number;
+  task: string;
+  isComplete: boolean;
+  ownerId: string;
+  insertedAt: Date | string;
+}
+
 // Utility function to normalize todo data from database
-export const normalizeTodo = (todo: any) => ({
+export const normalizeTodo = (todo: DatabaseTodo) => ({
   id: todo.id,
   task: todo.task,
   isComplete: todo.isComplete,
-  // ownerId: todo.ownerId,
   insertedAt: todo.insertedAt instanceof Date 
     ? todo.insertedAt.toISOString() 
     : typeof todo.insertedAt === 'string' 
@@ -12,6 +19,6 @@ export const normalizeTodo = (todo: any) => ({
 });
 
 // Utility function to normalize an array of todos
-export const normalizeTodos = (todos: any[]) => {
+export const normalizeTodos = (todos: DatabaseTodo[]) => {
   return Array.isArray(todos) ? todos.map(normalizeTodo) : [];
 };
