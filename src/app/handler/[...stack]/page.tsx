@@ -1,15 +1,31 @@
 import { StackHandler } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
 
-// Define the type for your params as a Promise
+// Define the type for params as a Promise
 type ParamsType = Promise<{ stack?: string[] }>;
+
+// Define the type for searchParams as a Promise
+type SearchParamsType = Promise<Record<string, string>>;
 
 export default async function Page(props: {
   params: ParamsType;
-  searchParams: Record<string, string>;
+  searchParams: SearchParamsType;
 }) {
-  // Await the params promise to resolve
-  const resolvedParams = await props.params;
-  
-  return <StackHandler app={stackServerApp} fullPage routeProps={{ ...props, params: resolvedParams }} />;
+  // Await both params and searchParams promises to resolve
+  const [resolvedParams, resolvedSearchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ]);
+
+  return (
+    <StackHandler
+      app={stackServerApp}
+      fullPage
+      routeProps={{
+        ...props,
+        params: resolvedParams,
+        searchParams: resolvedSearchParams,
+      }}
+    />
+  );
 }
