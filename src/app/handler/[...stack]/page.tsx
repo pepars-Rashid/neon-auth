@@ -1,9 +1,15 @@
 import { StackHandler } from "@stackframe/stack";
 import { stackServerApp } from "@/stack";
 
-export default function Page(props: {
-	params: { stack?: string[] };
-	searchParams: Record<string, string>;
+// Define the type for your params as a Promise
+type ParamsType = Promise<{ stack?: string[] }>;
+
+export default async function Page(props: {
+  params: ParamsType;
+  searchParams: Record<string, string>;
 }) {
-	return <StackHandler app={stackServerApp} fullPage routeProps={props} />;
-} 
+  // Await the params promise to resolve
+  const resolvedParams = await props.params;
+  
+  return <StackHandler app={stackServerApp} fullPage routeProps={{ ...props, params: resolvedParams }} />;
+}
