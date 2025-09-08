@@ -1,5 +1,9 @@
+import AppLoading from '@/components/Loading';
+
 export default function Loading() {
 	return (
-		<div style={{ padding: 24 }}>Loading...</div>
+		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+			<AppLoading />
+		</div>
 	);
 } 

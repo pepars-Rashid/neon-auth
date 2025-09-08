@@ -1,76 +1,42 @@
-"use client";
-import { useEffect, useState, useTransition } from "react";
-import { useUser, UserButton } from "@stackframe/stack";
-import { addTodo, deleteTodo, getTodos, toggleTodo } from "@/app/actions/todoActions";
+'use client';
+import { useEffect, useState } from 'react';
+import { getTodos } from '@/app/actions/todoActions';
+import StoreProvider from './StoreProvider';
+import TodoClient from './TodoClient';
+import { normalizeTodos } from '@/lib/utils/todoUtils';
+import Loading from '@/components/Loading';
 
 export default function Home() {
-	const user = useUser();
-	const [todos, setTodos] = useState<Array<{ id: number; task: string; isComplete: boolean }>>([]);
-	const [task, setTask] = useState("");
-	const [isPending, startTransition] = useTransition();
+  const [initialTodos, setInitialTodos] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		startTransition(async () => {
-			const items = await getTodos();
-			setTodos(items as any);
-		});
-	}, [user?.id]);
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const todos = await getTodos();
+        const normalizedTodos = normalizeTodos(todos);
+        setInitialTodos(normalizedTodos);
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-	async function onAdd(e: React.FormEvent) {
-		e.preventDefault();
-		if (!task.trim()) return;
-		await addTodo(task.trim());
-		setTask("");
-		const items = await getTodos();
-		setTodos(items as any);
-	}
+    fetchTodos();
+  }, []);
 
-	async function onToggle(id: number, isComplete: boolean) {
-		await toggleTodo(id, !isComplete);
-		const items = await getTodos();
-		setTodos(items as any);
-	}
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
 
-	async function onDelete(id: number) {
-		await deleteTodo(id);
-		const items = await getTodos();
-		setTodos(items as any);
-	}
-
-	return (
-		<div className="max-w-xl mx-auto py-12">
-			<header className="flex items-center justify-between mb-6">
-				<h1 className="text-2xl font-semibold">Neon Auth Todos</h1>
-				{user ? (
-					<UserButton />
-				) : (
-					<div className="flex gap-3 text-sm">
-						<a className="underline" href="/handler/sign-in">Sign In</a>
-						<a className="underline" href="/handler/sign-up">Sign Up</a>
-					</div>
-				)}
-			</header>
-			{user ? (
-				<>
-					<form onSubmit={onAdd} className="flex gap-2 mb-4">
-						<input value={task} onChange={(e) => setTask(e.target.value)} placeholder="Add a task" className="flex-1 border px-3 py-2 rounded" />
-						<button disabled={isPending} className="px-4 py-2 rounded bg-black text-white">Add</button>
-					</form>
-					<ul className="space-y-2">
-						{todos.map((t) => (
-							<li key={t.id} className="flex items-center justify-between border rounded px-3 py-2">
-								<label className="flex items-center gap-2">
-									<input type="checkbox" checked={t.isComplete} onChange={() => onToggle(t.id, t.isComplete)} />
-									<span className={t.isComplete ? "line-through" : ""}>{t.task}</span>
-								</label>
-								<button className="text-sm text-red-600" onClick={() => onDelete(t.id)}>Delete</button>
-							</li>
-						))}
-					</ul>
-				</>
-			) : (
-				<p className="text-sm">Please sign in to manage your todos.</p>
-			)}
-		</div>
-	);
+  return (
+    <StoreProvider initialTodos={initialTodos}>
+      <TodoClient />
+    </StoreProvider>
+  );
 }
