@@ -2,7 +2,6 @@ interface DatabaseTodo {
   id: number;
   task: string;
   isComplete: boolean;
-  ownerId: string;
   insertedAt: Date | string;
 }
 
