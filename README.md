@@ -13,6 +13,7 @@ A modern, full-stack Todo application built with **Next.js 15**, **Neon Auth**, 
 - [🔐 Authentication Flow](#-authentication-flow)
 - [📁 Project Structure](#-project-structure)
 - [🚀 Deployment](#-deployment)
+ - [📚 Documentation](#-documentation)
 
 ## 🏗️ Project Overview
 
@@ -375,3 +376,13 @@ npm start        # Start production server
 - **Server Action Types**: Proper typing for all operations
 
 This setup provides a robust, scalable foundation for a modern todo application with excellent user experience and developer ergonomics! 🎉
+
+## 📚 Documentation
+
+Comprehensive docs live in `docs/`:
+
+- `docs/index.md` — overview and links
+- `docs/apis.md` — server actions API
+- `docs/redux.md` — Redux slice, store, hooks, and state shape
+- `docs/components.md` — public components and props
+- `docs/utils.md` — utility helpers
